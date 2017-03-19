@@ -1,17 +1,30 @@
 #!/bin/bash
-# written by Paulo Cereda
-# Epic tool is epic :)
-QUACKEDITOR='open -a /Applications/TextMate.app'
-if [ $# -eq 0 ]
-then
-echo "quack 1.0 - David's favourite tool"
+MYEDITOR='open -a /Applications/TextMate.app'
+SEARCHING=$(which kpsewhich)
+FILES=$@
 echo
-echo usage: quack filename [ filename filename ... ]
-echo
+echo =========STARTING=========
+if [ $# -eq 0 ] 
+ then
+  echo
+  echo No file given
+  echo usage: gedtex filename [ filename filename ... ]
+  echo
+  echo ===========DONE===========
 else
-for entry in $(kpsewhich --all $@)
-do
-$QUACKEDITOR "$entry"
-done
+  for entry in $FILES
+   do
+	if [ -z "$($SEARCHING $entry)" ]
+	 then
+ 		echo
+		echo -e "\033[0;31m No file $entry \033[0m"
+	 else
+		$MYEDITOR $($SEARCHING $entry) 
+ 		echo
+		echo -e "\033[0;32m Open file $entry \033[0m"
+	fi
+  done
+  echo
+  echo ===========DONE===========
 fi
 
